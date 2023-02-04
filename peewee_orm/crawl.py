@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
+from models import Article
+
 
 def crawl_page(url):
     response = requests.get(url)
@@ -9,7 +11,9 @@ def crawl_page(url):
         soup = BeautifulSoup(response.text, 'html.parser')
         div = soup.find('div', attrs={'class': 'news-detail-header'})
         title = div.find('h1')
-        print(title.text)
+        body = soup.select_one(".detYazi")
+
+        return {'body': body.text, 'title': title.text}
 
 
 def get_links():
@@ -24,14 +28,4 @@ def get_links():
     return links
 
 
-if __name__ == '__main__':
-
-    #  links = ['https://www.trthaber.com/haber/spor/fenerbahce-taraftari-tffyi-protesto-etti-743533.html',
-    #          'https://www.trthaber.com/haber/spor/manchester-united-zirve-takibini-surdurdu-743532.html',
-    #          'https://www.trthaber.com/haber/spor/galatasaray-trabzonspor-macina-hazir-743522.html',
-    #          'https://www.trthaber.com/haber/spor/bandirmasporda-mesut-bakkalin-sozlesmesi-feshedildi-743514.html',
-    #          ]
-    # for link in links:
-    #     crawl_page(link)
-    get_links()
 
